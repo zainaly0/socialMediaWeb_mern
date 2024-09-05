@@ -14,7 +14,7 @@ export const register = async (req, res) => {
             picturePath,
             friends,
             location,
-            occupation, 
+            occupation,
             viewedProfile,
             impressions
         } = req.body
@@ -39,6 +39,28 @@ export const register = async (req, res) => {
         res.status(200).json(savedUser)
     } catch (error) {
         console.log("internal server errro")
-        res.staus(500).json({error: error.message})
+        res.staus(500).json({ error: error.message })
     }
+}
+
+
+export const login = async (req, res) => {
+    try {
+        const {
+            email, password
+        } = req.body
+
+        const user = await User.findOne({ email: email })
+        if (!user) return res.status(400).json({ msg: "user does not exist" })
+
+        const isMatch = await bcrypt.compare(password, user.password)
+        if (!isMatch) res.status(400).json({ msg: "invalid credentials" })
+
+        const jwt = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+        delete user.password;
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+
 }

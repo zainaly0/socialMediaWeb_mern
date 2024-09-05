@@ -8,6 +8,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import authRoutes from './routes/auth.js'
 import { register } from './controllers/auth.js'
 
 //configuration
@@ -19,7 +20,11 @@ const app = express()
 app.use(express.json())
 app.use(helmet())
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
+// app.use(morgan('combined'))
 app.use(morgan('common'))
+// app.use(morgan('dev'))
+// app.use(morgan('short'))
+// app.use(morgan('tiny'))
 app.use(bodyParser.json({ limit: "30mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors())
@@ -41,6 +46,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 // route with files
 app.post("/auth/register", upload.single('picture'), register)
+app.use("/auth", authRoutes)
 
 
 
