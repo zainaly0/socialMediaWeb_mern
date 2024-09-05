@@ -34,7 +34,7 @@ export const getUserFriends = async (req, res) => {
     }
 }
 
-
+// update
 
 export const addRemoveFriend = async (req, res) => {
     try {
@@ -66,6 +66,6 @@ export const addRemoveFriend = async (req, res) => {
 
         res.status(200).json(formattedFriends)
     } catch (error) {
-
+        res.status(404).json({message: err.message})
     }
 }
